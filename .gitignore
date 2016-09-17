@@ -5,3 +5,6 @@
 /nbproject/private/
 /vendor
 composer.lock
+/mobile-app/EcoDriving Challange/platforms/browser/browser.json
+/mobile-app/EcoDriving Challange/platforms/browser/config.xml
+/mobile-app/EcoDriving Challange/platforms/browser/www/config.xml
