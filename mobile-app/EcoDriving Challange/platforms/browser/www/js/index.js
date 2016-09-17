@@ -2,6 +2,7 @@ var map = null;
 var poly = null;
 var bounds = null;
 var boundsNotSet = true;
+var multiply = 1;
 var markers = [];
 
 var app = {
@@ -18,29 +19,6 @@ var app = {
     updateState: function(points, tripPoints) {
         var $welcomeScreen = $('#homePage');
         var $lvls = $welcomeScreen.find('.lECOvel');
-//        $.getJSON('http://172.31.2.19:8000/test.json', function(data) {
-//           if (data.currentLevel) {
-//               $welcomeScreen.find('.currentLevel').html(data.currentLevel);
-//
-//               $lvls.find('.level').removeClass('active');
-//               for (var i = 1; i <= data.currentLevel; i++) {
-//                   $lvls.find('.level' + i).addClass('active');
-//               }
-//
-//               $welcomeScreen.find('.multiplier').html(data.multiplayer);
-//               $welcomeScreen.find('.pointsTotal').html(data.points);
-//               $welcomeScreen.find('.place').html(data.place);
-//               $welcomeScreen.find('.nextLevel').html(data.nextLevel);
-//
-//               if (data.state === "Driving") {
-//                   $welcomeScreen.find('.seeYourTrip').show();
-//               } else {
-//                   $welcomeScreen.find('.seeYourTrip').hide();
-//               }
-//           } 
-//
-//           setTimeout(function() { app.updateState(); }, 10000);
-//        });
 
         if (typeof points === 'undefined') {
             var points = 23454;
@@ -51,64 +29,91 @@ var app = {
         }
         
         $.getJSON('http://172.31.2.19:8000/app.php/trip', function(data) {
-            
-            var path = poly.getPath();
-            var position = null;
+            if (data.length) {
+                var path = poly.getPath();
+                var position = null;
+                var pointsPart = 0;
+                var time = new Date();
+                for (var i = 0; i < data.length; i++) {
+                    position = new google.maps.LatLng(data[i].lat,data[i].lng);
+                    path.push(position);
+                    bounds.extend(position);
 
-            for (var i = 0; i < data.length; i++) {
-                position = new google.maps.LatLng(data[i].lat,data[i].lng);
-                path.push(position);
-                bounds.extend(position);
-
-                if (typeof data[i].violations !== 'undefined' && data[i].violations.length) {
-                    if (map) {
-                        placeOnMap(data[i]);
-                    } else {
-                        markers.push(data[i]);
+                    if (data[i].violations.length || data[i].obedience.length) {
+                        if (map) {
+                            placeOnMap(data[i]);
+                        } else {
+                            markers.push(data[i]);
+                        }
                     }
+
+                    pointsPart = data[i].points * multiply;
+                    time.setTime(data[i].timestamp * 1000);
                 }
-                
-                points += data[i].points;
-                tripPoints += data[i].points;
+
+                pointsPart = Math.round(pointsPart);
+                points += pointsPart;
+                tripPoints += pointsPart;
+
+                if (pointsPart < 0) {
+                    $welcomeScreen.toggleClass("redBackground");
+                    setTimeout(function(){
+                        $welcomeScreen.toggleClass("redBackground");
+                     },100);
+                } else if (pointsPart >= 10) {
+                    $welcomeScreen.toggleClass("greenBackground");
+                    setTimeout(function(){
+                        $welcomeScreen.toggleClass("greenBackground");
+                     },100);
+                }
+
+                poly.setPath(path);
+
+                if (boundsNotSet && map) {
+                    boundsNotSet = false;
+                    map.fitBounds(bounds);
+                }
+
+                $welcomeScreen.find('.pointsTotal').html(points);
+                $welcomeScreen.find('.place').html('44262');
+
+                $('#map').find('.status').find('.time').html(dateToDMY(time));
+
+                $lvls.find('.level').removeClass('active');
+
+                if (tripPoints > 0) {
+                    $lvls.find('.level1').addClass('active');
+                    multiply = 1;
+                }
+
+                if (tripPoints > 100) {
+                    $lvls.find('.level2').addClass('active');
+                    multiply = 1.1;
+                }
+
+                if (tripPoints > 500) {
+                    $lvls.find('.level3').addClass('active');
+                    multiply = 1.2;
+                }
+
+                if (tripPoints <= 0) {
+                    $lvls.find('.leveln1').addClass('active');
+                }
+
+                if (tripPoints <= -30) {
+                    $lvls.find('.leveln2').addClass('active');
+                }
+
+                if (tripPoints <= -100) {
+                    $lvls.find('.leveln3').addClass('active');
+                }
+
+                $welcomeScreen.find('.multiplier').html(multiply);
             }
             
-            poly.setPath(path);
-            
-            if (boundsNotSet && map) {
-                boundsNotSet = false;
-                map.fitBounds(bounds);
-            }
-            
-            $welcomeScreen.find('.pointsTotal').html(points);
-            $welcomeScreen.find('.place').html('44262');
-            
-            $lvls.find('.level').removeClass('active');
-            
-            if (tripPoints > 40) {
-                $lvls.find('.level1').addClass('active');
-            }
-            
-            if (tripPoints > 100) {
-                $lvls.find('.level2').addClass('active');
-            }
-            
-            if (tripPoints > 500) {
-                $lvls.find('.level3').addClass('active');
-            }
-            
-            if (tripPoints <= 0) {
-                $lvls.find('.leveln1').addClass('active');
-            }
-            
-            if (tripPoints <= -30) {
-                $lvls.find('.leveln2').addClass('active');
-            }
-            
-            if (tripPoints <= -100) {
-                $lvls.find('.leveln3').addClass('active');
-            }
-            
-            setTimeout(function() { app.updateState(points, tripPoints); }, 1000);
+            setTimeout(function() { 
+                app.updateState(points, tripPoints); 
+            }, 15000);
         });
     }
 };
@@ -128,7 +133,11 @@ $( document ).on( "swipeleft", '#map', function() {
 $( document ).on( "swiperight", '#map', function() {
     $.mobile.changePage( "#homePage", { transition: "slide", reverse: true } );
 });
-        
+
+$( document ).on('click', '#map a', function() {
+    map.fitBounds(bounds);
+});
+
 $(document).on("pageshow","#map",function(){ 
     if (!$(this).hasClass('initialized')) {
         $(this).addClass('initialized');
@@ -174,17 +183,38 @@ function showMap()
 function placeOnMap(data, map) {
     position = new google.maps.LatLng(data.lat,data.lng);
     
+    content = '';
+    
+    for (var i = 0; i < data.violations.length; i++) {
+        content += data.violations[i].desc + '<br/>';
+    }
+    
+    for (var i = 0; i < data.obedience.length; i++) {
+        content += data.obedience[i].desc + '<br/>';
+    }
+    
     var infowindow = new google.maps.InfoWindow({
-        content: data.violations[0].desc
+        content: content
     });
 
     var marker = new google.maps.Marker({
         position: position,
         map: map,
-        title: data.violations[0].desc
+        title: 'Road event'
     });
 
     marker.addListener('click', function() {
         infowindow.open(map, marker);
     });
+}
+
+function dateToDMY(date) {
+    var d = date.getDate();
+    var m = date.getMonth() + 1;
+    var y = date.getFullYear();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    return (hour <= 9 ? '0' + hour : hour) + ':' + 
+            (minute <= 9 ? '0' + minute : minute) + ' ' + 
+            (d <= 9 ? '0' + d : d) + '-' + (m<=9 ? '0' + m : m) + '-' + '' + y;
 }

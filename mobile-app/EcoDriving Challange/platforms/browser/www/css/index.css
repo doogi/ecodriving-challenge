@@ -8,6 +8,7 @@
 .ui-btn {
     height: 10%;
 }
+
 body, htrml {
     width: 100%;
     height: 100%;
@@ -22,9 +23,24 @@ body, htrml {
     background-position: 50% 50%;
 }
 
+#homePage {
+    -webkit-transition: background 0.2s ease-in-out;
+    -ms-transition:     background 0.2s ease-in-out;
+    transition:         background 0.2s ease-in-out;
+}
+
+#homePage.redBackground {
+    background-color: #ff0000;
+}
+
+#homePage.greenBackground {
+    background-color: #15A606;
+}
+
 #map, #homePage {
     width: 100%;
     height: 100%;
+    overflow: hidden;
 }
 
 #homePage h2 {
@@ -84,4 +100,33 @@ body, htrml {
 .statusText p {
     margin: 3% 0;
     padding: 0;
+}
+
+.status {
+    width: 100%;
+    height: 5%;
+    background-color: #15A606;
+}
+
+.status a, .status a:visited, .status a:hover {
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+    width: 10%;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    padding-top: 2%;
+    float: left;
+}
+
+.status .time {
+    float: right;
+    color: white;
+    display: block;
+    vertical-align: middle;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 1% 5%;
+    font-size: 115%;
 }
