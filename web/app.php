@@ -138,18 +138,19 @@ $app->get('/trip', function () use ($app, $m) {
 
     if (count($speedList) > 5) {
         $standardDeviation = sd($speedList);
-        $lastEntry = end($speedList);
+        $lastEntry = end($data);
 
         if ($standardDeviation < 10) {
+            $averageSpeed = array_sum($speedList)/count($speedList);
             $data[] = [
                 'lng' => $lastEntry['lng'],
                 'lat' => $lastEntry['lat'],
-                'timestamp' => $lastEntry['timestampt'],
+                'timestamp' => $lastEntry['timestamp'],
                 'points' => 10,
                 'violations' => [],
                 'obedience' => [
                     'id' => 'EQUAL_SPEED_OBEDIENCE',
-                    'desc' => 'You kept your speed for a while, good job!'
+                    'desc' => sprintf('You kept your speed (%.2f km/h) for a while, good job!', $averageSpeed)
                 ]
             ];
         }
