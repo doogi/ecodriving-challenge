@@ -38,7 +38,6 @@ function sd($array) {
     return sqrt(array_sum(array_map("sd_square", $array, array_fill(0,count($array), (array_sum($array) / count($array)) ) ) ) / (count($array)-1) );
 }
 
-
 $m = new MongoDB\Client("mongodb://localhost:27017");
 
 $app->get('/decode-int', function () {
@@ -47,7 +46,7 @@ $app->get('/decode-int', function () {
 
 $app->get('/api', function() use ($app, $m) {
     $rows = [];
-    $howMany = rand(1,50);
+    $howMany = rand(1,100);
 
     while($howMany-- > 0) {
         $rows[] = $m->data->rows->findOneAndUpdate(
@@ -75,6 +74,7 @@ $app->get('/trip', function () use ($app, $m) {
     $responseContent = json_decode($response->getContent(), true);
 
     $speedList = [];
+    $rpmList = [];
     foreach ($responseContent as $row) {
         if (empty($row['loc'])) {
             continue;
@@ -106,18 +106,22 @@ $app->get('/trip', function () use ($app, $m) {
         }
 
         $rpm = decodeInt($row['fields']['MDI_OBD_RPM']['b64_value'])['val'];
-        if ($rpm > 2000) {
-            $points -= 10;
-            $violations[] = [
-                'id' => 'RPM_VIOLATION',
-                'desc' => sprintf('Whoa! You reached %d RPMs, fuel is disappearing like in black hole!', $rpm)
-            ];
+        if (!empty($rpm)) {
+            $rpmList[] = $rpm;
+            if ($rpm > 2000) {
+                $points -= 10;
+                $violations[] = [
+                    'id' => 'RPM_VIOLATION',
+                    'desc' => sprintf('Whoa! You reached %d RPMs, fuel is disappearing like in black hole!', $rpm)
+                ];
+            }
         }
 
         $speed = decodeInt($row['fields']['MDI_OBD_SPEED']['b64_value'])['val'];
         if (!empty($speed)) {
             $speedList[] = $speed;
             if ($speed > 130) {
+                $speedList = [];
                 $points -= 10;
                 $violations[] = [
                     'id' => 'OVERSPEED_VIOLATION',
@@ -140,8 +144,8 @@ $app->get('/trip', function () use ($app, $m) {
         $standardDeviation = sd($speedList);
         $lastEntry = end($data);
 
-        if ($standardDeviation < 10) {
-            $averageSpeed = array_sum($speedList)/count($speedList);
+        $averageSpeed = array_sum($speedList)/count($speedList);
+        if ($standardDeviation < 10 && $averageSpeed < 100) {
             $data[] = [
                 'lng' => $lastEntry['lng'],
                 'lat' => $lastEntry['lat'],
@@ -151,6 +155,26 @@ $app->get('/trip', function () use ($app, $m) {
                 'obedience' => [
                     'id' => 'EQUAL_SPEED_OBEDIENCE',
                     'desc' => sprintf('You kept your speed (%.2f km/h) for a while, good job!', $averageSpeed)
+                ]
+            ];
+        }
+    }
+
+    if (count($rpmList) > 3) {
+        $standardDeviation = sd($rpmList);
+        $lastEntry = end($data);
+
+        $averageRpm = array_sum($rpmList)/count($speedList);
+        if ($standardDeviation < 1000 && $averageRpm > 1500) {
+            $data[] = [
+                'lng' => $lastEntry['lng'],
+                'lat' => $lastEntry['lat'],
+                'timestamp' => $lastEntry['timestamp'],
+                'points' => 10,
+                'violations' => [],
+                'obedience' => [
+                    'id' => 'EQUAL_RPM_OBEDIENCE',
+                    'desc' => sprintf('You kept your RPM (%.2f RPM) for a while, good job!', $averageRpm)
                 ]
             ];
         }
