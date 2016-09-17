@@ -8,6 +8,8 @@ $app['debug'] = true;
 const ACCELERATION_VIOLATION = "AAAACw==";
 const BREAKING_VIOLATION = "AAAACg==";
 
+const MAX_BATCH_SIZE = 30;
+
 function calculateKpH($knots) {
     return (int)$knots/1000 * 1.852;
 }
@@ -46,7 +48,7 @@ $app->get('/decode-int', function () {
 
 $app->get('/api', function() use ($app, $m) {
     $rows = [];
-    $howMany = rand(1,30);
+    $howMany = rand(1,MAX_BATCH_SIZE);
 
     while($howMany-- > 0) {
         $rows[] = $m->data->rows->findOneAndUpdate(
@@ -196,6 +198,7 @@ $app->get('/trips', function () use ($app, $m) {
 
     $speedList = [];
     $rpmList = [];
+    $count = 0;
     foreach ($m->data->rows->find([],['sort' => ['recorded_at' => 1]]) as $row) {
         if (empty($row['loc'])) {
             continue;
@@ -263,47 +266,54 @@ $app->get('/trips', function () use ($app, $m) {
             'violations' => $violations,
             'obedience' => $obedience
         ];
-    }
 
-    if (count($speedList) > 5) {
-        $standardDeviation = sd($speedList);
-        $lastEntry = end($data);
+        if ($count++ > MAX_BATCH_SIZE) {
+            if (count($speedList) > 5) {
+                $standardDeviation = sd($speedList);
+                $lastEntry = end($data);
 
-        $averageSpeed = array_sum($speedList)/count($speedList);
-        if ($standardDeviation < 10 && $averageSpeed < 100) {
-            $data[] = [
-                'lng' => $lastEntry['lng'],
-                'lat' => $lastEntry['lat'],
-                'timestamp' => $lastEntry['timestamp'],
-                'points' => 10,
-                'violations' => [],
-                'obedience' => [
-                    'id' => 'EQUAL_SPEED_OBEDIENCE',
-                    'desc' => sprintf('You kept your speed (%.2f km/h) for a while, good job!', $averageSpeed)
-                ]
-            ];
+                $averageSpeed = array_sum($speedList)/count($speedList);
+                if ($standardDeviation < 10 && $averageSpeed < 100) {
+                    $data[] = [
+                        'lng' => $lastEntry['lng'],
+                        'lat' => $lastEntry['lat'],
+                        'timestamp' => $lastEntry['timestamp'],
+                        'points' => 10,
+                        'violations' => [],
+                        'obedience' => [
+                            'id' => 'EQUAL_SPEED_OBEDIENCE',
+                            'desc' => sprintf('You kept your speed (%.2f km/h) for a while, good job!', $averageSpeed)
+                        ]
+                    ];
+                }
+            }
+
+            if (count($rpmList) > 3) {
+                $standardDeviation = sd($rpmList);
+                $lastEntry = end($data);
+
+                $averageRpm = array_sum($rpmList)/count($speedList);
+                if ($standardDeviation < 1000 && $averageRpm > 1500) {
+                    $data[] = [
+                        'lng' => $lastEntry['lng'],
+                        'lat' => $lastEntry['lat'],
+                        'timestamp' => $lastEntry['timestamp'],
+                        'points' => 10,
+                        'violations' => [],
+                        'obedience' => [
+                            'id' => 'EQUAL_RPM_OBEDIENCE',
+                            'desc' => sprintf('You kept your RPM (%.2f RPM) for a while, good job!', $averageRpm)
+                        ]
+                    ];
+                }
+            }
+
+            $speedList = [];
+            $rpmList = [];
+            $count = 0;
         }
     }
 
-    if (count($rpmList) > 3) {
-        $standardDeviation = sd($rpmList);
-        $lastEntry = end($data);
-
-        $averageRpm = array_sum($rpmList)/count($speedList);
-        if ($standardDeviation < 1000 && $averageRpm > 1500) {
-            $data[] = [
-                'lng' => $lastEntry['lng'],
-                'lat' => $lastEntry['lat'],
-                'timestamp' => $lastEntry['timestamp'],
-                'points' => 10,
-                'violations' => [],
-                'obedience' => [
-                    'id' => 'EQUAL_RPM_OBEDIENCE',
-                    'desc' => sprintf('You kept your RPM (%.2f RPM) for a while, good job!', $averageRpm)
-                ]
-            ];
-        }
-    }
 
     return (new \Symfony\Component\HttpFoundation\JsonResponse($data))
         ->setEncodingOptions(
