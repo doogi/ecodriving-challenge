@@ -44,7 +44,7 @@ $(document).on("pageshow","#map",function(){
         $(this).addClass('initialized');
         var map = initialize();
 
-        $.getJSON('http://172.31.2.19:8000/index.php/trip', function(data) {
+        $.getJSON('http://172.31.2.19:8000/app.php/trip', function(data) {
             poly = new google.maps.Polyline({
                 strokeColor: '#000000',
                 strokeOpacity: 1.0,

@@ -1,0 +1,164 @@
+@font-face {
+  font-family: 'robotothin';
+  src: url("../fonts/roboto-thin-webfont.eot");
+  src: url("../fonts/roboto-thin-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/roboto-thin-webfont.woff2") format("woff2"), url("../fonts/roboto-thin-webfont.woff") format("woff"), url("../fonts/roboto-thin-webfont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'robotoregular';
+  src: url("../fonts/roboto-regular-webfont.eot");
+  src: url("../fonts/roboto-regular-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/roboto-regular-webfont.woff2") format("woff2"), url("../fonts/roboto-regular-webfont.woff") format("woff"), url("../fonts/roboto-regular-webfont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'robotolight';
+  src: url("../fonts/roboto-light-webfont.eot");
+  src: url("../fonts/roboto-light-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/roboto-light-webfont.woff2") format("woff2"), url("../fonts/roboto-light-webfont.woff") format("woff"), url("../fonts/roboto-light-webfont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
+
+@font-face {
+  font-family: 'robotobold';
+  src: url("../fonts/roboto-bold-webfont.eot");
+  src: url("../fonts/roboto-bold-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/roboto-bold-webfont.woff2") format("woff2"), url("../fonts/roboto-bold-webfont.woff") format("woff"), url("../fonts/roboto-bold-webfont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
+
+html,
+body {
+  width:100%;
+  height:100%;
+}
+body {
+  padding:0;
+  background:#F5F5F5;
+  font-family: 'robotolight';
+}
+body > .container {
+  background: #FFF;
+  padding-top:50px;
+  padding-bottom:50px;
+}
+.normal {
+  padding-top:130px;
+}
+li {
+  list-style-type: none;
+}
+a,a:hover {
+  text-decoration: none;
+}
+label {
+  font-weight:normal;
+}
+
+.head {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100px;
+  background:#FFF;
+  z-index:100;
+  .logo {
+    display:inline-block;
+    margin:20px;
+  }
+  nav {
+    display: inline-block;
+    float: right;
+    margin: 20px;
+    padding: 0;
+    ul {
+      li {
+        display:inline-block;
+        a {
+          display:block;
+          padding:20px;
+          color:#16A606;
+        }
+      }
+    }
+  }
+}
+.hvr-sweep-to-top:before {
+  background:#16A606;
+}
+
+.login {
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 400px;
+  form {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 50px;
+    font-size: 22px;
+    color: #3E3E3E;
+    .form-group {
+      width: 40%;
+      label {
+        margin-right:20px;
+      }
+      input {
+        width:71%;
+      }
+    }
+    button {
+      font-size: 22px;
+      width: 18%;
+    }
+  }
+}
+
+.video {
+  width:100%;
+  height:100%;
+  overflow: hidden;
+  position:relative;
+  .pattern {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:url('../img/video-pattern.png');
+  }
+}
+
+.form-inline .form-control {
+  font-size: 22px;
+  height: 48px;
+}
+
+.btn-default {
+  background:#16A606;
+  border-color:#16A606;
+  color:#FFF;
+
+}
+
+.map {
+  height:400px;
+
+}
+
+.summary {
+  .btn {
+    float:right;
+  }
+  .table>tbody>tr>td {
+    line-height: 30px;
+    width:50%;
+  }
+}
+
+
+@media (min-width: 992px) {
+  .container {
+    width: 1370px;
+  }
+}

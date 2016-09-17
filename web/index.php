@@ -1,218 +1,71 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-require_once __DIR__.'/../vendor/autoload.php';
+    <title>Signin Template for Bootstrap</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/hover-min.css">
+    <link href="css/signin.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
 
-$app = new Silex\Application();
-$app['debug'] = true;
+    <script src="js/jquery-3.1.0.min.js"></script>
 
-const ACCELERATION_VIOLATION = "AAAACw==";
-const BREAKING_VIOLATION = "AAAACg==";
+</head>
+<body>
+<header class="head">
+    <div class="container">
+        <a class="logo">
+            <img src="img/eco-driving-challenge-small.png"/>
+        </a>
+        <nav>
+            <ul>
+                <li>
+                    <a class="hvr-sweep-to-top" href="#">HOME</a>
+                </li>
+                <li>
+                    <a class="hvr-sweep-to-top" href="#">RANKING</a>
+                </li>
+                <li>
+                    <a class="hvr-sweep-to-top" href="#">ABOUT EDC</a>
+                </li>
+                <li>
+                    <a class="hvr-sweep-to-top" href="#">SIGN IN&nbsp;&nbsp;<i class="fa fa-sign-in" aria-hidden="true"></i></a>
+                </li>
+                <li>
+                    <a class="hvr-sweep-to-top" href="#">SIGN UP&nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="video">
+    <video width="100%" autoplay poster="" muted loop="loop" >
+        <!--<source src="" type="video/webm">-->
+        <source src="video/video.mp4" type="video/mp4">
+        <!--<source src="" type="video/ogg">-->
+    </video>
+    <div class="pattern"></div>
+</div>
 
-function calculateKpH($knots) {
-    return (int)$knots/1000 * 1.852;
-}
 
-function calculateMs($knots) {
-    return (int)$knots/1000 * 0.514444;
-}
+<div class="login container">
+    <form class="form-inline">
 
-function decodeInt($value) {
-    return unpack("Nval", base64_decode($value));
-}
-
-function decodeString($value) {
-    return implode(array_map("chr", unpack('C*', base64_decode($value))));
-}
-
-function caclulateAcceleration($speedAtBegining, $speedAtEnd, $timeInterval) {
-    return ($speedAtEnd-$speedAtBegining)/$timeInterval;
-}
-
-// Function to calculate square of value - mean
-function sd_square($x, $mean) { return pow($x - $mean,2); }
-
-// Function to calculate standard deviation (uses sd_square)
-function sd($array) {
-
-// square root of sum of squares devided by N-1
-    return sqrt(array_sum(array_map("sd_square", $array, array_fill(0,count($array), (array_sum($array) / count($array)) ) ) ) / (count($array)-1) );
-}
-
-
-$m = new MongoDB\Client("mongodb://localhost:27017");
-
-$app->get('/decode-int', function () {
-    return new \Symfony\Component\HttpFoundation\Response(implode(array_map("chr", unpack('C*', base64_decode("QjoxMzEwNzI=")))));
-});
-
-$app->get('/api', function() use ($app, $m) {
-    $rows = [];
-    $howMany = rand(1,50);
-
-    while($howMany-- > 0) {
-        $rows[] = $m->data->rows->findOneAndUpdate(
-            ['sent' => ['$exists' => false]],
-            ['$set' => ['sent' => true]],
-            ['sort' => ['recorded_at' => 1]]
-        );
-    }
-
-    return new \Symfony\Component\HttpFoundation\JsonResponse($rows);
-});
-
-$app->get('/reset-api', function() use ($app, $m) {
-    $m->data->rows->updateMany([], ['$unset' => ['sent' => '']]);
-
-    return new \Symfony\Component\HttpFoundation\Response("OK");
-});
-
-$app->get('/trip', function () use ($app, $m) {
-    $data = [];
-
-    $subRequest = \Symfony\Component\HttpFoundation\Request::create('/api');
-    /** @var \Symfony\Component\HttpFoundation\JsonResponse $response */
-    $response = $app->handle($subRequest, \Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, false);
-    $responseContent = json_decode($response->getContent(), true);
-
-    $speedList = [];
-    foreach ($responseContent as $row) {
-        if (empty($row['loc'])) {
-            continue;
-        }
-
-        $points = 0;
-        $violations = [];
-        $obedience = [];
-        if ($row['fields']['BEHAVE_ID']['b64_value'] === ACCELERATION_VIOLATION) {
-            $points += 10;
-            $beginingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_BEGIN']['b64_value'])['val']);
-            $endingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_END']['b64_value'])['val']);
-            $duration = decodeInt($row['fields']['BEHAVE_ELAPSED']['b64_value'])['val']/1000;
-            $obedience[] = [
-                'id' => 'LIGHT_SPEED_OBEDIENCE',
-                'desc' => sprintf('You accelerated from %d km/h to %d km/h in %.2f seconds, now try to keep the speed!', $beginingSpeed, $endingSpeed, $duration)
-            ];
-        }
-
-        if ($row['fields']['BEHAVE_ID']['b64_value'] === BREAKING_VIOLATION) {
-            $points -= 10;
-            $beginingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_BEGIN']['b64_value'])['val']);
-            $endingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_END']['b64_value'])['val']);
-            $duration = decodeInt($row['fields']['BEHAVE_ELAPSED']['b64_value'])['val']/1000;
-            $violations[] = [
-                'id' => 'HARD_BREAKS_VIOLATION',
-                'desc' => sprintf('You decelerated from %d km/h to %d km/h in %.2f seconds!', $beginingSpeed, $endingSpeed, $duration)
-            ];
-        }
-
-        $rpm = decodeInt($row['fields']['MDI_OBD_RPM']['b64_value'])['val'];
-        if ($rpm > 2000) {
-            $points -= 10;
-            $violations[] = [
-                'id' => 'RPM_VIOLATION',
-                'desc' => sprintf('Whoa! You reached %d RPMs, fuel is disappearing like in black hole!', $rpm)
-            ];
-        }
-
-        $speed = decodeInt($row['fields']['MDI_OBD_SPEED']['b64_value'])['val'];
-        if (!empty($speed)) {
-            $speedList[] = $speed;
-            if ($speed > 130) {
-                $points -= 10;
-                $violations[] = [
-                    'id' => 'OVERSPEED_VIOLATION',
-                    'desc' => sprintf('Hey Bandit, keep calm and slow down a little, you\'re not in a plane, %d km/h is too much', $speed)
-                ];
-            }
-        }
-
-        $data[] = [
-            'lng' => $row['loc'][0],
-            'lat' => $row['loc'][1],
-            'timestamp' => strtotime($row['recorded_at']),
-            'points' => $points,
-            'violations' => $violations,
-            'obedience' => $obedience
-        ];
-    }
-
-    if (count($speedList) > 5) {
-        $standardDeviation = sd($speedList);
-        $lastEntry = end($speedList);
-
-        if ($standardDeviation < 10) {
-            $data[] = [
-                'lng' => $lastEntry['lng'],
-                'lat' => $lastEntry['lat'],
-                'timestamp' => $lastEntry['timestampt'],
-                'points' => 10,
-                'violations' => [],
-                'obedience' => [
-                    'id' => 'EQUAL_SPEED_OBEDIENCE',
-                    'desc' => 'You kept your speed for a while, good job!'
-                ]
-            ];
-        }
-    }
-
-    return (new \Symfony\Component\HttpFoundation\JsonResponse($data))
-        ->setEncodingOptions(
-            \Symfony\Component\HttpFoundation\JsonResponse::DEFAULT_ENCODING_OPTIONS | JSON_PRETTY_PRINT
-        );
-});
-
-$app->get('/blog', function () use ($app) {
-    $m = new MongoDB\Client("mongodb://localhost:27017");
-
-    $data = [];
-
-    foreach ($m->data->rows->find() as $row) {
-        if (empty($row['loc'])) {
-            continue;
-        }
-
-        $data[] = [
-            'lng' => $row['loc'][0],
-            'lat' => $row['loc'][1],
-            'timestamp' => strtotime($row['recorded_at'])
-        ];
-    }
-
-//    $accelerations = [ ];
-//    foreach ($m->data->rows->find(['fields.BEHAVE_ID.b64_value' => $accelerationId]) as $row) {
-//        $speedAtBeginning = calculateKpH(decodeValue($row['fields']['BEHAVE_GPS_SPEED_BEGIN']['b64_value'])['val']);
-//        $speedAtEnd = calculateKpH(decodeValue($row['fields']['BEHAVE_GPS_SPEED_END']['b64_value'])['val']);
-//        $duration = decodeValue($row['fields']['BEHAVE_ELAPSED']['b64_value'])['val'];
-//        $accelerations[] = [
-//            'speedOnStart' => $speedAtBeginning,
-//            'speedOnEnd' => $speedAtEnd,
-//            'duration' => $duration,
-//            'acceleration' => caclulateAcceleration($speedAtBeginning, $speedAtEnd, $duration/1000)
-//        ];
-//    };
-//
-//    $breakings = [ ];
-//    foreach ($m->data->rows->find(['fields.BEHAVE_ID.b64_value' => $breakingID]) as $row) {
-//        $speedAtBeginning = calculateKpH(decodeValue($row['fields']['BEHAVE_GPS_SPEED_BEGIN']['b64_value'])['val']);
-//        $speedAtEnd = calculateKpH(decodeValue($row['fields']['BEHAVE_GPS_SPEED_END']['b64_value'])['val']);
-//        $duration = decodeValue($row['fields']['BEHAVE_ELAPSED']['b64_value'])['val'];
-//        $breakings[] = [
-//            'speedOnStart' => $speedAtBeginning,
-//            'speedOnEnd' => $speedAtEnd,
-//            'duration' => $duration,
-//            'acceleration' => caclulateAcceleration($speedAtBeginning, $speedAtEnd, $duration/1000)
-//        ];
-//    };
-//
-//    $data = [ ];
-//    $data['accelerations'] = $accelerations;
-//    $data['breakings'] = $breakings;
-
-    return (new \Symfony\Component\HttpFoundation\JsonResponse($data))
-        ->setEncodingOptions(
-            \Symfony\Component\HttpFoundation\JsonResponse::DEFAULT_ENCODING_OPTIONS | JSON_PRETTY_PRINT
-        );
-});
-// ... definitions
-
-$app->run();
+        <div class="form-group">
+            <label for="exampleInputName2">E-mail</label>
+            <input type="email" class="form-control" id="exampleInputName2" placeholder="Jane Doe" value="driver@ecodrivingchallenge.com">
+        </div>
+        <div class="form-group">
+            <label for="exampleInputEmail2">Password</label>
+            <input type="password" class="form-control" id="exampleInputEmail2" value="driver">
+        </div>
+        <button type="submit" class="btn btn-default">SIGN IN</button>
+    </form>
+</div>
+</body>
