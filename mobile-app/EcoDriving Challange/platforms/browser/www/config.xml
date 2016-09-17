@@ -8,7 +8,7 @@
     </feature>
     <name>EcoDriving Challange</name>
     <description>Simple EcoDriving app</description>
-    <author email="support@phonegap.com" href="http://phonegap.com">PhoneGap Team</author>
+    <author email="m.strozyk@udp.pl">Hack</author>
     <content src="index.html" />
     <icon src="icon.png" />
     <access origin="*" />
