@@ -34,22 +34,43 @@
 
 <body>
     <div id="homePage" data-role="page" class="ui-page-active">
-        <img src="img/logo.png" width="100%"/>
-        <h2>Your lECOvel is <b><span class="currentLevel"></span></b></h2>
+        <div class="topLogo"></div>
+        <h2>Your lECOvel</h2>
         <div class="lECOvel">
-            <div class="level level3"></div>
-            <div class="level level2"></div>
-            <div class="level level1"></div>
+            <div class="col">
+                <div class="holder" style="height: 50%"></div>
+                <div class="level leveln leveln3"></div>
+            </div>
+            <div class="col">
+                <div class="holder" style="height: 50%"></div>
+                <div class="level leveln leveln2"></div>
+            </div>
+            <div class="col">
+                <div class="holder" style="height: 50%"></div>
+                <div class="level leveln leveln1"></div>
+            </div>
+            <div class="col">
+                <div class="holder" style="height: 35%"></div>
+                <div class="level level1"></div>
+            </div>
+            <div class="col">
+                <div class="holder" style="height: 25%"></div>
+                <div class="level level2"></div>
+            </div>
+            <div class="col">
+                <div class="level level3"></div>
+            </div>
         </div>
-        Your earn <b><span class="pointsEarning"></span></b> points per minute.<br/>
-        Multiplayer is <b><span class="multiplayer"></span>x</b>.<br/>
-        You have <b><span class="pointsTotal"></span></b> poits total which makes you <b><span class="place"></span></b> driver.<br/>
-        Make additiona <b><span class="nextLevel"></span></b> points to get beter place.
+        <div class="statusText">
+            <p>Multiplier is <b><span class="multiplier"></span>x</b>.</p>
+            <p>You have <b><span class="pointsTotal"></span></b> poits total which makes you <b><span class="place"></span></b> driver.<br/></p>
+            <p>Make additiona <b><span class="nextLevel"></span></b> points to get beter place.</p>
+        </div>
         <a href="#map" class="ui-btn">See your current trip</a>
     </div>
     <div data-role='page' id='map'>
          <div style="width:100%;height:90%" id="map_canvas"></div>
-        <a href="#homePage" class="back">Back</a>
+        <a href="#homePage" class="ui-btn">Back</a>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
