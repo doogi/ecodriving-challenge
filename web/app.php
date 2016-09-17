@@ -46,7 +46,7 @@ $app->get('/decode-int', function () {
 
 $app->get('/api', function() use ($app, $m) {
     $rows = [];
-    $howMany = rand(1,100);
+    $howMany = rand(1,30);
 
     while($howMany-- > 0) {
         $rows[] = $m->data->rows->findOneAndUpdate(
@@ -83,7 +83,7 @@ $app->get('/trip', function () use ($app, $m) {
         $points = 0;
         $violations = [];
         $obedience = [];
-        if ($row['fields']['BEHAVE_ID']['b64_value'] === ACCELERATION_VIOLATION) {
+        if (!empty($row['fields']['BEHAVE_ID']) && $row['fields']['BEHAVE_ID']['b64_value'] === ACCELERATION_VIOLATION) {
             $points += 10;
             $beginingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_BEGIN']['b64_value'])['val']);
             $endingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_END']['b64_value'])['val']);
@@ -94,7 +94,7 @@ $app->get('/trip', function () use ($app, $m) {
             ];
         }
 
-        if ($row['fields']['BEHAVE_ID']['b64_value'] === BREAKING_VIOLATION) {
+        if (!empty($row['fields']['BEHAVE_ID']) && $row['fields']['BEHAVE_ID']['b64_value'] === BREAKING_VIOLATION) {
             $points -= 10;
             $beginingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_BEGIN']['b64_value'])['val']);
             $endingSpeed = calculateKpH(decodeInt($row['fields']['BEHAVE_GPS_SPEED_END']['b64_value'])['val']);
@@ -105,28 +105,32 @@ $app->get('/trip', function () use ($app, $m) {
             ];
         }
 
-        $rpm = decodeInt($row['fields']['MDI_OBD_RPM']['b64_value'])['val'];
-        if (!empty($rpm)) {
-            $rpmList[] = $rpm;
-            if ($rpm > 2000) {
-                $points -= 10;
-                $violations[] = [
-                    'id' => 'RPM_VIOLATION',
-                    'desc' => sprintf('Whoa! You reached %d RPMs, fuel is disappearing like in black hole!', $rpm)
-                ];
+        if (!empty($row['fields']['MDI_OBD_RPM'])) {
+            $rpm = decodeInt($row['fields']['MDI_OBD_RPM']['b64_value'])['val'];
+            if (!empty($rpm)) {
+                $rpmList[] = $rpm;
+                if ($rpm > 2000) {
+                    $points -= 10;
+                    $violations[] = [
+                        'id' => 'RPM_VIOLATION',
+                        'desc' => sprintf('Whoa! You reached %d RPMs, fuel is disappearing like in black hole!', $rpm)
+                    ];
+                }
             }
         }
 
-        $speed = decodeInt($row['fields']['MDI_OBD_SPEED']['b64_value'])['val'];
-        if (!empty($speed)) {
-            $speedList[] = $speed;
-            if ($speed > 130) {
-                $speedList = [];
-                $points -= 10;
-                $violations[] = [
-                    'id' => 'OVERSPEED_VIOLATION',
-                    'desc' => sprintf('Hey Bandit, keep calm and slow down a little, you\'re not in a plane, %d km/h is too much', $speed)
-                ];
+        if (!empty($row['fields']['MDI_OBD_SPEED'])) {
+            $speed = decodeInt($row['fields']['MDI_OBD_SPEED']['b64_value'])['val'];
+            if (!empty($speed)) {
+                $speedList[] = $speed;
+                if ($speed > 130) {
+                    $speedList = [];
+                    $points -= 10;
+                    $violations[] = [
+                        'id' => 'OVERSPEED_VIOLATION',
+                        'desc' => sprintf('Hey Bandit, keep calm and slow down a little, you\'re not in a plane, %d km/h is too much', $speed)
+                    ];
+                }
             }
         }
 
