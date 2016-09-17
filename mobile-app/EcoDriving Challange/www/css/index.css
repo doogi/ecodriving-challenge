@@ -1,7 +1,10 @@
-body {
+body, html {
     color: orange;
     text-align: center;
-    padding: 10px 0;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .lECOvel {
@@ -33,4 +36,11 @@ body {
     color: white;
     background-color: #15A606;
     text-decoration: none;
+}
+
+.back {
+    display: block;
+    height: 10%;
+    width: 100%;
+    background-color: #15A606;
 }

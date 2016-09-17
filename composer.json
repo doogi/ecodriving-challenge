@@ -18,5 +18,9 @@
         "psr-0": {
             "": "src/"
         }
+    },
+    "require": {
+        "silex/silex": "~2.0",
+        "mongodb/mongodb": "^1.0.0"
     }
 }
