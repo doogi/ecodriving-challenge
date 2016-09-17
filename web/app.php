@@ -2,6 +2,9 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+use Firebase\Token\TokenException;
+use Firebase\Token\TokenGenerator;
+    
 $app = new Silex\Application();
 $app['debug'] = true;
 
@@ -46,7 +49,7 @@ $app->get('/decode-int', function () {
 
 $app->get('/api', function() use ($app, $m) {
     $rows = [];
-    $howMany = rand(1,30);
+    $howMany = 10;//rand(1,30);
 
     while($howMany-- > 0) {
         $rows[] = $m->data->rows->findOneAndUpdate(
@@ -183,7 +186,26 @@ $app->get('/trip', function () use ($app, $m) {
             ];
         }
     }
+    
+    $token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhZG1pbiI6ZmFsc2UsImRlYnVnIjpmYWxzZSwiZCI6eyJ1aWQiOiIzb1V6WDZNalllVGFIUHhZbVJNNjJkOVI2ZHUxIn0sInYiOjAsImlhdCI6MTQ3NDE0NzMwNX0.LQU56Fga9OgY3hyadLw1gate0L0rFEKwVOAPRAQVhuQ';
 
+    foreach ($data as $element) {
+        //test only
+        if ($element['points'] === 0 && rand(0,10) < 5) {
+            $element['points'] = rand(-10,10);
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL,"https://ecodrivingchallange.firebaseio.com/vechicle/YfM102C8grQbdSor7wh6EBIZXwG2/data.json?auth=" . $token);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($element));
+        $data = curl_exec($ch);
+        curl_close($ch);
+        if (rand(1, 10) <= 7) {
+            sleep(rand(1, 2));
+        }
+    }
+
+    return 'OK';
     return (new \Symfony\Component\HttpFoundation\JsonResponse($data))
         ->setEncodingOptions(
             \Symfony\Component\HttpFoundation\JsonResponse::DEFAULT_ENCODING_OPTIONS | JSON_PRETTY_PRINT

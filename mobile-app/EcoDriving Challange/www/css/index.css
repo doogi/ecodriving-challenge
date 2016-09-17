@@ -37,7 +37,7 @@ body, htrml {
     background-color: #15A606;
 }
 
-#map, #homePage {
+#map, #homePage, #login {
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -129,4 +129,8 @@ body, htrml {
     height: 100%;
     padding: 1% 5%;
     font-size: 115%;
+}
+
+#login #form {
+    margin: 10%;
 }
