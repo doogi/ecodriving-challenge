@@ -43,11 +43,22 @@
 </head>
 
 <body>
-    <div>
-        <h1>DrivingChallange</h1>
-        <h2>Hack Zurich</h2>
+    <div class="welcomeScrren">
+        <img src="img/logo.png" width="100%"/>
+        <h2>Your lECOvel is <b><span class="currentLevel"></span></b></h2>
+        <div class="lECOvel">
+            <div class="level level3"></div>
+            <div class="level level2"></div>
+            <div class="level level1"></div>
+        </div>
+        Your earn <b><span class="pointsEarning"></span></b> points per minute.<br/>
+        Multiplayer is <b><span class="multiplayer"></span>x</b>.<br/>
+        You have <b><span class="pointsTotal"></span></b> poits total which makes you <b><span class="place"></span></b> driver.<br/>
+        Make additiona <b><span class="nextLevel"></span></b> points to get beter place.
+        <a href="current.html" class="seeYourTrip">See your current trip</a>
     </div>
     <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
         app.initialize();

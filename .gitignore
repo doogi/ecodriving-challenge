@@ -2,3 +2,4 @@
 ### Vagrant template
 .vagrant/
 .idea/
+/nbproject/private/

@@ -37,13 +37,46 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
+//        var parentElement = document.getElementById(id);
+//        var listeningElement = parentElement.querySelector('.listening');
+//        var receivedElement = parentElement.querySelector('.received');
+//
+//        listeningElement.setAttribute('style', 'display:none;');
+//        receivedElement.setAttribute('style', 'display:block;');
+//
+//        console.log('Received Event: ' + id);
     }
 };
+
+$(document).ready(function() {
+   updateState();
+});
+
+function updateState() {
+    var $welcomeScreen = $('.welcomeScrren');
+    var $lvls = $welcomeScreen.find('.lECOvel');
+    $.getJSON('http://usa4us.pl/hz2016/test.json', function(data) {
+       if (data.currentLevel) {
+           $welcomeScreen.find('.currentLevel').html(data.currentLevel);
+           
+           $lvls.find('.level').removeClass('active');
+           for (var i = 1; i <= data.currentLevel; i++) {
+               $lvls.find('.level' + i).addClass('active');
+           }
+           
+           $welcomeScreen.find('.pointsEarning').html(data.pointsPerMinute);
+           $welcomeScreen.find('.multiplayer').html(data.multiplayer);
+           $welcomeScreen.find('.pointsTotal').html(data.points);
+           $welcomeScreen.find('.place').html(data.place);
+           $welcomeScreen.find('.nextLevel').html(data.nextLevel);
+           
+           if (data.state === "Driving") {
+               $welcomeScreen.find('.seeYourTrip').show();
+           } else {
+               $welcomeScreen.find('.seeYourTrip').hide();
+           }
+       } 
+       
+       setTimeout(function() { updateState(); }, 10000);
+    });
+}
