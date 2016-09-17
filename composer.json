@@ -1,0 +1,22 @@
+{
+    "name": "hckzrch2016/ecodriving-challenge",
+    "description": "HackZurich2016 Ecodriving challenge",
+    "minimum-stability": "dev",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "author's name",
+            "email": "email@example.com"
+        }
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "mongoimport -d data -c rows /vagrant/data.json"
+        ]
+    },
+    "autoload": {
+        "psr-0": {
+            "": "src/"
+        }
+    }
+}
