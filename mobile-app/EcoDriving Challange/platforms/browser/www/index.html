@@ -66,6 +66,7 @@
             <p>You have <b><span class="pointsTotal"></span></b> poits total which makes you no. <b><span class="place"></span></b> driver.<br/></p>
             <p>Make additional <b><span class="nextLevel">46785</span></b> points to get better place.</p>
         </div>
+        <a href="#" onclick="login()" class="ui-btn">Login</a>
         <a href="#map" class="ui-btn">See your current trip</a>
     </div>
     <div data-role='page' id='map'>
@@ -78,13 +79,39 @@
         <div style="width:100%;height:85%" id="map_canvas"></div>
         <a href="#homePage" class="ui-btn">Back</a>
     </div>
+    <script src="https://www.gstatic.com/firebasejs/3.4.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAr8hy6e6O4-NeM7NiZH0JEVWAPra6f-mo",
+        authDomain: "ecodrivingchallange.firebaseapp.com",
+        databaseURL: "https://ecodrivingchallange.firebaseio.com",
+        storageBucket: "ecodrivingchallange.appspot.com",
+        messagingSenderId: "1028003527495"
+      };
+      firebase.initializeApp(config);
+    </script>
     <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="js/openfb.js"></script>
     <script type="text/javascript" src="js/jquery.mobile-1.4.5.min.js"></script>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDStWDrszyqvbcw-rPApNSAB0WEtZubUlo"></script>
     <link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
         app.initialize();
+        
+        openFB.init({appId: '145656189222183', tokenStore: window.localStorage});
+        
+        function login() {
+            openFB.login(
+                function(response) {
+                    if(response.status === 'connected') {
+                        alert('Facebook login succeeded, got access token: ' + response.authResponse.accessToken);
+                    } else {
+                        alert('Facebook login failed: ' + response.error);
+                    }
+                }, {scope: 'email,read_stream,publish_actions'});
+        }
     </script>
 </body>
 
