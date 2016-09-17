@@ -24,12 +24,28 @@ function caclulateAcceleration($speedAtBegining, $speedAtEnd, $timeInterval) {
     return ($speedAtEnd-$speedAtBegining)/$timeInterval;
 }
 
-$app->get('/trip', function () use ($app) {
-    $m = new MongoDB\Client("mongodb://localhost:27017");
+$m = new MongoDB\Client("mongodb://localhost:27017");
 
+$app->get('/api', function() use ($app, $m) {
+    $rows = [];
+    $howMany = rand(1,5);
+
+    while($howMany-- > 0) {
+        $rows[] = $m->data->rows->findOneAndUpdate(['sent' => ['$exists' => false]], ['$set' => ['sent' => true]]);
+    }
+
+    return new \Symfony\Component\HttpFoundation\JsonResponse($rows);
+});
+
+$app->get('/trip', function () use ($app, $m) {
     $data = [];
 
-    foreach ($m->data->rows->find() as $row) {
+    $subRequest = \Symfony\Component\HttpFoundation\Request::create('/api');
+    /** @var \Symfony\Component\HttpFoundation\JsonResponse $response */
+    $response = $app->handle($subRequest, \Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, false);
+    $responseContent = json_decode($response->getContent(), true);
+
+    foreach ($responseContent as $row) {
         if (empty($row['loc'])) {
             continue;
         }
@@ -64,6 +80,15 @@ $app->get('/trip', function () use ($app) {
             $violations[] = [
                 'id' => 'RPM_VIOLATION',
                 'desc' => sprintf('Whoa! You reached %d RPMs, fuel is disappearing like in black hole!', $rpm)
+            ];
+        }
+
+        $speed = decodeValue($row['fields']['MDI_OBD_SPEED']['b64_value'])['val'];
+        if ($speed > 130) {
+            $points -= 10;
+            $violations[] = [
+                'id' => 'OVERSPEED_VIOLATION',
+                'desc' => sprintf('Hey Bandit, keep calm and slow down a little, you\'re not in a plane, %d km/h is too much', $speed)
             ];
         }
 
