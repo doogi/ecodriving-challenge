@@ -50,7 +50,7 @@ var app = {
             var tripPoints = 0;
         }
         
-        $.getJSON('http://172.31.2.19:8000/index.php/trip', function(data) {
+        $.getJSON('http://172.31.2.19:8000/app.php/trip', function(data) {
             
             var path = poly.getPath();
             var position = null;
