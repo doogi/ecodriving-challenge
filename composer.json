@@ -21,6 +21,7 @@
     },
     "require": {
         "silex/silex": "~2.0",
-        "mongodb/mongodb": "^1.0.0"
+        "mongodb/mongodb": "^1.0.0",
+        "firebase/token-generator": "^3.0"
     }
 }

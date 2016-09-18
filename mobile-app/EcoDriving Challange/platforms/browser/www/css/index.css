@@ -16,7 +16,7 @@ body, htrml {
 
 .topLogo {
     width: 100%;
-    background-image: url("../img/logo.png");
+    background-image: url("../img/logo_rectangle.png");
     height: 15%;
     background-size: contain;
     background-repeat: no-repeat;
@@ -37,7 +37,7 @@ body, htrml {
     background-color: #15A606;
 }
 
-#map, #homePage {
+#map, #homePage, #login {
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -129,4 +129,16 @@ body, htrml {
     height: 100%;
     padding: 1% 5%;
     font-size: 115%;
+}
+
+#login #form {
+    margin: 10%;
+}
+
+.violations {
+    color: #ff0000;
+}
+
+.obedience {
+    color: #15A606;
 }
