@@ -46,6 +46,7 @@
 </header>
 
 <div class=" container">
+    <h3>Ranking</h3>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -53,7 +54,9 @@
             <th>Nick</th>
             <th>Car</th>
             <th>Points</th>
-            <th>Details</th>
+            <th>Distance</th>
+            <th>Badges</th>
+<!--            <th>Details</th>-->
         </tr>
         </thead>
         <tbody>
@@ -68,11 +71,24 @@
                 Skoda Fabia
             </td>
             <td>
-                626
+                2504
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                16260.303 km
             </td>
+            <td>
+                <i class="fa fa-envira" aria-hidden="true"></i>
+                <i class="fa fa-car" aria-hidden="true"></i>
+                <i class="fa fa-wheelchair-alt" aria-hidden="true"></i>
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <i class="fa fa-map-o" aria-hidden="true"></i>
+                <i class="fa fa-life-ring" aria-hidden="true"></i>
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <i class="fa fa-bolt" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -82,14 +98,24 @@
                 Rock
             </td>
             <td>
-                Skoda Fabia
+                Audi A6
             </td>
             <td>
-                626
+                2425
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                14394.028 km
             </td>
+            <td>
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <i class="fa fa-map-o" aria-hidden="true"></i>
+                <i class="fa fa-life-ring" aria-hidden="true"></i>
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <i class="fa fa-bolt" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -99,14 +125,23 @@
                 Beard
             </td>
             <td>
-                Skoda Fabia
+                BMW X2
             </td>
             <td>
-                626
+                1447
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                10126.823 km
             </td>
+            <td>
+                <i class="fa fa-car" aria-hidden="true"></i>
+                <i class="fa fa-wheelchair-alt" aria-hidden="true"></i>
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <i class="fa fa-map-o" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -116,14 +151,23 @@
                 Dapper
             </td>
             <td>
-                Skoda Fabia
+                Mazda 3
             </td>
             <td>
-                626
+                1397
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                9850.675 km
             </td>
+            <td>
+                <i class="fa fa-envira" aria-hidden="true"></i>
+                <i class="fa fa-wheelchair-alt" aria-hidden="true"></i>
+                <i class="fa fa-map-o" aria-hidden="true"></i>
+                <i class="fa fa-bolt" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -133,14 +177,24 @@
                 BonJ
             </td>
             <td>
-                Skoda Fabia
+                Citroes C4
             </td>
             <td>
-                626
+                1309
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                9201.552 km
             </td>
+            <td>
+                <i class="fa fa-envira" aria-hidden="true"></i>
+                <i class="fa fa-car" aria-hidden="true"></i>
+                <i class="fa fa-wheelchair-alt" aria-hidden="true"></i>
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <i class="fa fa-bolt" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -150,14 +204,21 @@
                 Dash
             </td>
             <td>
-                Skoda Fabia
+                VW Golf 6
             </td>
             <td>
-                626
+                1176
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                7310.026 km
             </td>
+            <td>
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <i class="fa fa-bolt" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -167,14 +228,21 @@
                 Pyro
             </td>
             <td>
-                Skoda Fabia
+                Porsche 911
             </td>
             <td>
-                626
+                1080
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                12260.303 km
             </td>
+            <td>
+                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                <i class="fa fa-map-o" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -184,14 +252,22 @@
                 Bash
             </td>
             <td>
-                Skoda Fabia
+                Audi A4
             </td>
             <td>
-                626
+                932
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                6840.274 km
             </td>
+            <td>
+                <i class="fa fa-envira" aria-hidden="true"></i>
+                <i class="fa fa-car" aria-hidden="true"></i>
+                <i class="fa fa-wheelchair-alt" aria-hidden="true"></i>
+            </td>
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         <tr>
             <td>
@@ -201,14 +277,20 @@
                 Dog
             </td>
             <td>
-                Skoda Fabia
+                Renault Scenic
             </td>
             <td>
-                626
+                869
             </td>
             <td>
-                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>
+                5341.533 km
             </td>
+            <td>
+                <i class="fa fa-bolt" aria-hidden="true"></i>
+<!--            </td>-->
+<!--            <td>-->
+<!--                <button type="button" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></button>-->
+<!--            </td>-->
         </tr>
         </tbody>
     </table>

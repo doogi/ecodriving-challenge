@@ -240,9 +240,13 @@ function placeOnMap(data) {
     var currentIcon = icons.neutral.icon;
     if(data.points > 0) {
         currentIcon = icons.plus.icon;
+        var date = moment.unix(data.timestamp).format("YYYY-MM-DD H:mm:ss");
+        $('.list-added tbody').append('<tr><td class="left"><span>'+date+'</span></td><td>'+content+'</td></tr>');
     }
     if(data.points < 0) {
         currentIcon = icons.minus.icon;
+        var date = moment.unix(data.timestamp).format("YYYY-MM-DD H:mm:ss");
+        $('.list-removed tbody').append('<tr><td class="left"><span>'+date+'</span></td><td>'+content+'</td></tr>');
     }
 
     var marker = new google.maps.Marker({
@@ -255,6 +259,7 @@ function placeOnMap(data) {
     marker.addListener('click', function() {
         infowindow.open(map, marker);
     });
+
 }
 
 function checkJsonEnd(){
@@ -278,6 +283,9 @@ function checkJsonEnd(){
 
     var artistTemplate = _.template($('#single-result').html());
     $('#accordion .panel-default').append(artistTemplate( result ));
+    $('.details').on('click', function(){
+        $(this).next().toggle();
+    });
     initMap();
 }
 
@@ -293,5 +301,7 @@ function initMap() {
 
 $(document).ready(function(){
     mapGenerator.initialize();
+
+
 });
 

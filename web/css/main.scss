@@ -164,8 +164,24 @@ label {
     line-height: 30px;
     width:50%;
   }
+  .table>tbody>tr>td.left {
+    width:20%;
+  }
 }
 
+.list-added,
+.list-removed {
+  padding:0;
+  span {
+    font-weight:normal;
+    margin-right:10px;
+    display:inline-block;
+  }
+}
+.subtable {
+  margin-top:10px;
+  display:none;
+}
 
 @media (min-width: 992px) {
   .container {

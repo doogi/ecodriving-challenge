@@ -148,11 +148,11 @@
             <table class="table table-bordered">
                 <tbody>
                     <tr>
-                        <td>Total time:</td>
+                        <td class="left">Total time:</td>
                         <td><%= summary.time %></td>
                     </tr>
                     <tr>
-                        <td>Distance</td>
+                        <td class="left">Distance</td>
                         <td><%= summary.distance %></td>
                     </tr>
                 </tbody>
@@ -161,15 +161,27 @@
             <table class="table table-bordered">
                 <tbody>
                     <tr>
-                        <td>Added</td>
-                        <td>+<%= points.added %> <span class="btn btn-default">Details</span></td>
+                        <td class="left">Added</td>
+                        <td>+<%= points.added %> <span class="btn btn-default details">Details</span>
+                            <table class="table subtable list-added">
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Removed</td>
-                        <td><%= points.removed %> <span class="btn btn-default">Details</span></td>
+                        <td class="left">Removed</td>
+                        <td><%= points.removed %> <span class="btn btn-default details">Details</span>
+                            <table class="table subtable list-removed">
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </td>
                     </tr>
                     <tr>
-                        <td>Total</td>
+                        <td class="left">Total</td>
                         <td><%= points.total %></td>
                     </tr>
                 </tbody>
