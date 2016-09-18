@@ -16,7 +16,7 @@ body, htrml {
 
 .topLogo {
     width: 100%;
-    background-image: url("../img/logo.png");
+    background-image: url("../img/logo_rectangle.png");
     height: 15%;
     background-size: contain;
     background-repeat: no-repeat;
@@ -133,4 +133,12 @@ body, htrml {
 
 #login #form {
     margin: 10%;
+}
+
+.violations {
+    color: #ff0000;
+}
+
+.obedience {
+    color: #15A606;
 }

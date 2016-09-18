@@ -199,23 +199,38 @@ function placeOnMap(data, map) {
     
     if (typeof data.violations !== 'undefined') {
         for (var i = 0; i < data.violations.length; i++) {
-            content += data.violations[i].desc + '<br/>';
+            content += '<span class="violations">Violation:</span> ' +
+                    data.violations[i].desc + '<br/>';
         }
     }
     
     if (typeof data.obedience !== 'undefined') {
         for (var i = 0; i < data.obedience.length; i++) {
-            content += data.obedience[i].desc + '<br/>';
+            content += '<span class="obedience">Obedience:</span> ' + 
+                    data.obedience[i].desc + '<br/>';
         }
+    }
+    
+    var icon = 'img/pin';
+    if (data.points < 0) { 
+        content += '<br/>You <span class="violations">loose ' + (-1 * data.points) + ' points!</span>';
+        icon = icon + '_not_ok.png';
+    } else if (data.points > 0) {
+        content += '<br/>You <span class="obedience">earn ' + data.points + ' points!</span>';
+        icon = icon + '_ok.png';
+    } else {
+        content += '<br/>You got no points at all!</span>';
+        icon = icon + '.png';
     }
     
     var infowindow = new google.maps.InfoWindow({
         content: content
     });
-
+    
     var marker = new google.maps.Marker({
         position: position,
         map: map,
+        icon: icon,
         title: 'Road event'
     });
 
@@ -251,9 +266,9 @@ function processPiece(data) {
     if ((typeof data.violations !== 'undefined' && data.violations.length) || 
             (typeof data.obedience !== 'undefined' && data.obedience.length)) {
         if (map) {
-            placeOnMap(data);
+            placeOnMap(data, map);
         } else {
-            markers.push(data);
+            markers.push(data, map);
         }
     }
 
