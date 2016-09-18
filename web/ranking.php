@@ -26,19 +26,19 @@
         <nav>
             <ul>
                 <li>
-                    <a class="hvr-sweep-to-top" href="#">HOME</a>
+                    <a class="hvr-sweep-to-top" href="/">HOME</a>
                 </li>
                 <li>
-                    <a class="hvr-sweep-to-top" href="#">RANKING</a>
+                    <a class="hvr-sweep-to-top" href="ranking.php">RANKING</a>
                 </li>
                 <li>
-                    <a class="hvr-sweep-to-top" href="#">ABOUT EDC</a>
+                    <a class="hvr-sweep-to-top" href="results.php">MY RESULTS</a>
                 </li>
                 <li>
-                    <a class="hvr-sweep-to-top" href="#">SIGN IN&nbsp;&nbsp;<i class="fa fa-sign-in" aria-hidden="true"></i></a>
+                    <a class="hvr-sweep-to-top" href="/">SIGN IN&nbsp;&nbsp;<i class="fa fa-sign-in" aria-hidden="true"></i></a>
                 </li>
                 <li>
-                    <a class="hvr-sweep-to-top" href="#">SIGN UP&nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></a>
+                    <a class="hvr-sweep-to-top" href="/">SIGN UP&nbsp;&nbsp;<i class="fa fa-plus" aria-hidden="true"></i></a>
                 </li>
             </ul>
         </nav>
