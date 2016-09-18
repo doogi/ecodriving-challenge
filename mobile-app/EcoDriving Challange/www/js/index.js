@@ -337,7 +337,7 @@ function processPiece(data) {
 
 function initCredentials() {
     if (firebase.auth().currentUser) {
-//        firebase.auth().signOut();
+        firebase.auth().signOut();
         uid = firebase.auth().currentUser.uid;
     }
     

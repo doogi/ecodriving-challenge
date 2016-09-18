@@ -54,7 +54,7 @@ $app->get('/api', function() use ($app, $m) {
 
     //$howMany = rand(1,MAX_BATCH_SIZE);
     //for simulation
-    $howMany = 10;//rand(1,30);
+    $howMany = 20;//rand(1,30);
 
     while($howMany-- > 0) {
         $rows[] = $m->data->rows->findOneAndUpdate(
@@ -205,9 +205,9 @@ $app->get('/trip', function () use ($app, $m) {
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($element));
         $data = curl_exec($ch);
         curl_close($ch);
-        if (rand(1, 10) <= 7) {
-            sleep(rand(1, 2));
-        }
+//        if (rand(1, 10) <= 7) {
+//            sleep(rand(1, 2));
+//        }
     }
 
     return 'OK';
